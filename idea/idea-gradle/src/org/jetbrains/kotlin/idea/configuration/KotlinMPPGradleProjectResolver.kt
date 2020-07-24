@@ -309,6 +309,10 @@ open class KotlinMPPGradleProjectResolver : AbstractProjectResolverExtensionComp
             for (target in mppModel.targets) {
                 if (delegateToAndroidPlugin(target)) continue
                 if (target.name == KotlinTarget.METADATA_TARGET_NAME) continue
+
+                val hasSameKotlinTargetData = mainModuleNode.children.any { (it.data as? KotlinTargetData)?.externalName == target.name }
+                if (hasSameKotlinTargetData) continue
+
                 val targetData = KotlinTargetData(target.name).also {
                     it.archiveFile = target.jar?.archiveFile
                     it.konanArtifacts = target.konanArtifacts
